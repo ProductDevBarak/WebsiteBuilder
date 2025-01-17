@@ -1,8 +1,24 @@
 import React from "react";
 import Template from "./Template";
 import "../Home/home.css";
+import { useState } from "react";
+import { createChat } from "../../utils/code";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
+  const [prompt, setPrompt] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await createChat(prompt, navigate);
+    console.log(response);
+    setPrompt("");
+  };
+
+  const handleChange = (e) => {
+    setPrompt(e.target.value);
+  };
   return (
     <div className="app">
       <header className="header">
@@ -16,10 +32,12 @@ export default function Home() {
         <div className="input-container">
           <input
             type="text"
+            value={prompt}
             placeholder="Enter your prompt"
             className="input-box"
+            onChange={handleChange}
           />
-          <button className="submit-button">
+          <button onClick={handleSubmit} className="submit-button">
             <span>
               <svg
                 width="24"
