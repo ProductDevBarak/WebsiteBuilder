@@ -1,30 +1,29 @@
 import React, { useEffect } from "react";
 import { signInWithRedirect, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth, provider } from "./Firebase";
-import './Login.css';
+import { auth, provider } from "../../config/Firebase_Config";
+import "./Login.css";
 
-const Login = () => {
+export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Listen for authentication state changes
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        // console.log("User authenticated:", user);
         const userData = {
           name: user.displayName,
           email: user.email,
           phoneNumber: user.phoneNumber,
-          avatar: user.photoURL
+          avatar: user.photoURL,
         };
-        console.log('User Data:', userData);
-
-        // Navigate to home page when user is authenticated
-        navigate('/');
+        console.log("User Data:", userData);
+        navigate("/");
+      } else {
+        console.log("No user authenticated");
       }
     });
 
-    // Cleanup subscription on component unmount
     return () => unsubscribe();
   }, [navigate]);
 
@@ -41,6 +40,4 @@ const Login = () => {
       </div>
     </div>
   );
-};
-
-export default Login;
+}

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import code from "./src/code/routes/code.js";
 
 dotenv.config();
 const PORT = process.env.PORT;
@@ -12,12 +13,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
 
-// app.use("/api/auth", AuthRoute);
+app.use("/code", code);
 
 mongoose
   .connect(process.env.DB_URL)
