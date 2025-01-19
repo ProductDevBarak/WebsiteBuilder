@@ -10,6 +10,7 @@ const openai = new OpenAI({
 export const createChat = async (req, res) => {
   try {
     const completion = await openai.chat.completions.create({
+      // "id": "chatcmpl-ft:gpt-4o-2024-08-06:barak::Ar1tgxBb",
       model: "gpt-4o",
       messages: [
         {

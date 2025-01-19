@@ -10,6 +10,7 @@ export default function Home() {
   const [prompt, setPrompt] = useState("");
 
   const handleSubmit = async (e) => {
+    console.log(prompt);
     e.preventDefault();
     const response = await createChat(prompt, navigate);
     console.log(response);
