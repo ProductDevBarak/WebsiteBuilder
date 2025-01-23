@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import code from "./src/code/routes/code.js";
+import AuthRoute from "./src/users/routes/Auth.route.js";
 
 dotenv.config();
 const PORT = process.env.PORT;
@@ -19,6 +20,7 @@ app.use(
 );
 
 app.use("/code", code);
+app.use("/api/auth",AuthRoute);
 
 mongoose
   .connect(process.env.DB_URL)

@@ -1,6 +1,7 @@
 import React from "react";
 import Template from "./Template";
 import "../Home/home.css";
+import Logout from "../Login/LogOut.jsx";
 
 export default function Home() {
   return (
@@ -87,6 +88,7 @@ export default function Home() {
             />
           </div>
         </div>
+        <Logout/>
       </main>
     </div>
   );

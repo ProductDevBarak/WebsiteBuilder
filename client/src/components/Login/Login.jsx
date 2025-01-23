@@ -1,43 +1,56 @@
-import React, { useEffect } from "react";
-import { signInWithRedirect, onAuthStateChanged } from "firebase/auth";
+import React from "react";
+import { signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, provider } from "../../config/Firebase_Config";
 import "./Login.css";
 
-export default function Login() {
-  const navigate = useNavigate();
+const Login = () => {
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // console.log("User authenticated:", user);
-        const userData = {
-          name: user.displayName,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-          avatar: user.photoURL,
-        };
-        console.log("User Data:", userData);
-        navigate("/");
-      } else {
-        console.log("No user authenticated");
-      }
-    });
+    const handleLogin = async () => {
+        try {
+            // Firebase Authentication
+            const loginResponse = await signInWithPopup(auth, provider);
+            const user = loginResponse.user;
 
-    return () => unsubscribe();
-  }, [navigate]);
+            const userData = {
+                name: user.displayName,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                avatar: user.photoURL,
+            };
 
-  const handleLogin = () => {
-    signInWithRedirect(auth, provider);
-  };
+            // Backend API Call
+            const response = await fetch("http://localhost:8000/api/auth/login", {
+                method: "POST",
+                credentials: "include", // Allows cookies to be set by the server
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify(userData),
+            });
 
-  return (
-    <div className="login-container">
-      <div className="login-box">
-        <button className="microsoft-login-button" onClick={handleLogin}>
-          Sign in with Microsoft
-        </button>
-      </div>
-    </div>
-  );
-}
+            const data = await response.json();
+            if (!response.ok) {
+                alert(data.message);
+                return;
+            }
+
+            // Optionally, set the token as a cookie (for client-side use, if not using HttpOnly)
+            document.cookie = `token=${data.token}; path=/; SameSite=Strict; Secure`;
+
+            // Navigate to the protected route
+            navigate("/");
+        } catch (error) {
+            console.error("Login failed", error);
+            alert("Login failed. Please try again.");
+        }
+    };
+
+    return (
+        <div>
+            <h1>Microsoft Login Integration</h1>
+            <button onClick={handleLogin}>Login With Microsoft</button>
+        </div>
+    );
+};
+
+export default Login;
