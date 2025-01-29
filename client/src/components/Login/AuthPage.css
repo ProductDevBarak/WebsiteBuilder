@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+*{
+  /* color: #FFF; */
+  font-family: "DM Sans", serif;
+font-style: normal;
+line-height: normal;
+}
+.AuthPage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+  /* background-color: #242424; */
+  background-image: url('./Layers1.png');
+  background-size: cover;
+  background-position: center;
+  overflow-y: hidden;
+}
+
+.login-section {
+  padding: 20px;
+}
+@media (max-width: 1200px) {
+  .AuthPage::before{
+    opacity: 0.5;
+  }
+}
+@media (max-width: 850px)
+{
+  .login-section {
+    padding: 0;
+  }
+
+}
